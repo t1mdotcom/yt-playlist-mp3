@@ -1,0 +1,47 @@
+name: Bug report
+description: Melde einen Fehler in yt-playlist-mp3
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Was ist passiert?
+      description: Beschreibe das Problem so konkret wie möglich.
+      placeholder: "Beim Ausführen von ... bekomme ich ..."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduktion
+      description: Welcher Befehl wurde ausgeführt? Welche Playlist-URL (falls teilbar)?
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Erwartetes Verhalten
+    validations:
+      required: false
+  - type: input
+    id: os
+    attributes:
+      label: Betriebssystem
+      placeholder: "macOS 14.5 / Ubuntu 22.04 / ..."
+    validations:
+      required: true
+  - type: input
+    id: python
+    attributes:
+      label: Python-Version
+      placeholder: "python --version"
+    validations:
+      required: true
+  - type: input
+    id: yt-dlp
+    attributes:
+      label: yt-dlp-Version
+      placeholder: "yt-dlp --version"
+    validations:
+      required: true
