@@ -38,8 +38,8 @@ dev = [
 yt-playlist-mp3 = "yt_playlist_mp3.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/t1mdotcom/Youtube-Playlist-MP3-Download"
-Issues = "https://github.com/t1mdotcom/Youtube-Playlist-MP3-Download/issues"
+Homepage = "https://github.com/t1mdotcom/yt-playlist-mp3"
+Issues = "https://github.com/t1mdotcom/yt-playlist-mp3/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/yt_playlist_mp3"]

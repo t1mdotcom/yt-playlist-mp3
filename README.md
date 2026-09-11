@@ -1,6 +1,6 @@
 # yt-playlist-mp3
 
-[![CI](https://github.com/t1mdotcom/Youtube-Playlist-MP3-Download/actions/workflows/ci.yml/badge.svg)](https://github.com/t1mdotcom/Youtube-Playlist-MP3-Download/actions/workflows/ci.yml)
+[![CI](https://github.com/t1mdotcom/yt-playlist-mp3/actions/workflows/ci.yml/badge.svg)](https://github.com/t1mdotcom/yt-playlist-mp3/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
@@ -46,18 +46,27 @@ brew install yt-dlp ffmpeg
 sudo apt update && sudo apt install -y yt-dlp ffmpeg
 ```
 
+### Homebrew (macOS/Linux)
+
+```bash
+brew tap t1mdotcom/tap
+brew install yt-playlist-mp3
+```
+
+Die Formula zieht `yt-dlp` und `ffmpeg` automatisch mit.
+
 ### Aus dem Repo
 
 ```bash
-git clone https://github.com/t1mdotcom/Youtube-Playlist-MP3-Download.git
-cd Youtube-Playlist-MP3-Download
+git clone https://github.com/t1mdotcom/yt-playlist-mp3.git
+cd yt-playlist-mp3
 pip install .
 ```
 
 Oder direkt mit [`pipx`](https://pipx.pypa.io/):
 
 ```bash
-pipx install git+https://github.com/t1mdotcom/Youtube-Playlist-MP3-Download.git
+pipx install git+https://github.com/t1mdotcom/yt-playlist-mp3.git
 ```
 
 ## Verwendung
