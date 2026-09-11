@@ -28,6 +28,8 @@ yt-dlp --yes-playlist --ignore-errors --continue --no-overwrites --extract-audio
 - **Resume-fähig** dank `--continue` und `--no-overwrites`
 - **Browser-Cookies** für private oder altersbeschränkte Inhalte (`--cookies-from-browser`)
 - **`--dry-run`** zeigt den `yt-dlp`-Befehl, ohne ihn auszuführen
+- **Interaktiver Modus** ohne Argumente oder mit `-i` — fragt alle Optionen ab, zeigt eine Zusammenfassung und fragt vor dem Start nach
+- **`--check`** prüft Python-Version, `yt-dlp` und `ffmpeg` und zeigt passende Installationsbefehle
 - **Klare Fehlermeldungen** wenn `yt-dlp` oder `ffmpeg` fehlen
 
 ## Installation
@@ -59,6 +61,58 @@ pipx install git+https://github.com/t1mdotcom/Youtube-Playlist-MP3-Download.git
 ```
 
 ## Verwendung
+
+### Interaktiver Modus
+
+Ohne Argumente (oder mit `-i` / `--interactive`) startet ein geführter Dialog:
+
+```text
+$ yt-playlist-mp3
+
+──────────────────────────────────────────────────────────────
+  yt-playlist-mp3 0.1.0 — interaktiver Modus
+──────────────────────────────────────────────────────────────
+
+Systemcheck:
+  [OK]    Python 3.13.5
+  [OK]    yt-dlp (/opt/homebrew/bin/yt-dlp)
+  [OK]    ffmpeg (/opt/homebrew/bin/ffmpeg)
+
+Abbruch jederzeit mit Strg-C.
+
+Playlist- oder Video-URL: https://www.youtube.com/playlist?list=PL...
+Zielordner [downloads]: ~/Music/youtube
+Thumbnail in die MP3 einbetten? [J/n]:
+Cookies aus Browser (leer = keine, z. B. chrome/firefox):
+Dateinamen-Template [%(playlist_title)s/%(playlist_index)03d - %(title)s.%(ext)s]:
+Nur den yt-dlp-Befehl anzeigen (dry-run)? [j/N]:
+
+──────────────────────────────────────────────────────────────
+  Zusammenfassung
+──────────────────────────────────────────────────────────────
+  URL:        https://www.youtube.com/playlist?list=PL...
+  Zielordner: /Users/du/Music/youtube
+  Template:   %(playlist_title)s/%(playlist_index)03d - %(title)s.%(ext)s
+  Thumbnail:  ja
+  Cookies:    —
+  Dry-Run:    nein
+──────────────────────────────────────────────────────────────
+
+Jetzt starten? [J/n]:
+```
+
+Enter übernimmt jeweils den Wert in eckigen Klammern. Fehlt eine Voraussetzung, bricht der
+Dialog vor der ersten Frage ab und zeigt die passenden Installationsbefehle.
+
+### Systemcheck
+
+```bash
+yt-playlist-mp3 --check
+```
+
+Exit-Code `0`, wenn Python-Version, `yt-dlp` und `ffmpeg` passen — sonst `1` samt Hinweisen.
+
+### Direkter Aufruf
 
 ```bash
 yt-playlist-mp3 "https://www.youtube.com/playlist?list=DEINE_PLAYLIST_ID"
@@ -92,7 +146,9 @@ python -m yt_playlist_mp3 "https://www.youtube.com/playlist?list=..."
 
 | Flag                          | Standard                                                         | Beschreibung                                            |
 | ----------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------- |
-| `url` *(positional)*          | —                                                                | YouTube-Playlist-URL                                    |
+| `url` *(positional)*          | —                                                                | YouTube-Playlist-URL (optional; fehlt sie, startet der interaktive Modus) |
+| `-i`, `--interactive`         | *aus*                                                            | Geführter Dialog für alle Optionen                      |
+| `--check`                     | *aus*                                                            | Voraussetzungen prüfen und beenden                      |
 | `-o`, `--output-dir`          | `downloads`                                                      | Zielordner für die Downloads                            |
 | `--filename-template`         | `%(playlist_title)s/%(playlist_index)03d - %(title)s.%(ext)s`    | `yt-dlp`-Output-Template                                |
 | `--cookies-from-browser`      | —                                                                | Browser für Cookies (`chrome`, `firefox`, …)            |
@@ -118,9 +174,11 @@ pytest
 ├── src/yt_playlist_mp3/
 │   ├── __init__.py        # Package + Version
 │   ├── __main__.py        # python -m yt_playlist_mp3
-│   └── cli.py             # Argument-Parsing, Command-Bau, Entry-Point
+│   ├── cli.py             # Argument-Parsing, Command-Bau, Entry-Point
+│   └── tui.py             # Interaktiver Modus (stdlib, keine Extra-Deps)
 ├── tests/
-│   └── test_cli.py        # pytest
+│   ├── test_cli.py        # pytest
+│   └── test_tui.py        # pytest
 ├── .github/
 │   ├── workflows/ci.yml   # Lint + Tests auf 3.9–3.13 (Linux + macOS)
 │   ├── ISSUE_TEMPLATE/    # Bug + Feature
@@ -135,7 +193,12 @@ CI läuft auf Ubuntu **und** macOS gegen Python 3.9 bis 3.13.
 ## Troubleshooting
 
 **`Fehlende Abhängigkeiten: yt-dlp` / `ffmpeg`**
-Eines der externen Tools liegt nicht im `PATH`. Installation siehe oben.
+Eines der externen Tools liegt nicht im `PATH`. `yt-playlist-mp3 --check` zeigt, was fehlt,
+inklusive Installationsbefehl.
+
+**`Interaktiver Modus braucht ein Terminal`**
+Der Dialog wurde ohne TTY gestartet (Pipe, CI, `< /dev/null`). Dort den direkten Aufruf mit
+URL und Flags nutzen.
 
 **`HTTP Error 403` oder `Sign in to confirm`**
 Playlist ist privat oder altersbeschränkt. `--cookies-from-browser firefox` (oder ein anderer Browser, in dem du eingeloggt bist) hilft.
